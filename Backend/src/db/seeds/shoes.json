@@ -1,0 +1,162 @@
+[
+  {
+    "name": "Vibe Air Strider Pro",
+    "description": "Experience unparalleled comfort and style with the Vibe Air Strider Pro. Featuring a breathable mesh upper and responsive cushioning, it's perfect for both daily wear and intense workouts. The sleek design ensures you look good on the move.",
+    "price": 10999,
+    "brand": "Vibe",
+    "category": "sneakers",
+    "sizes": ["8", "9", "10", "11", "12"],
+    "images": [
+      "https://picsum.photos/seed/air-strider-1/400/500",
+      "https://picsum.photos/seed/air-strider-2/400/500",
+      "https://picsum.photos/seed/air-strider-3/400/500"
+    ],
+    "stock": 50,
+    "isFeatured": true
+  },
+  {
+    "name": "SkyFlex Runner's High",
+    "description": "Engineered for the long run. The SkyFlex Runner's High offers a lightweight frame, superior arch support, and a durable outsole for maximum traction on any surface. Push your limits with every stride.",
+    "price": 12499,
+    "brand": "SkyFlex",
+    "category": "sneakers",
+    "sizes": ["7", "8", "9", "10", "11", "12"],
+    "images": [
+      "https://picsum.photos/seed/skyflex-run-1/400/500",
+      "https://picsum.photos/seed/skyflex-run-2/400/500"
+    ],
+    "stock": 35
+  },
+  {
+    "name": "RidgeLine TerraFlex Boot",
+    "description": "Conquer any trail with the RidgeLine TerraFlex Boot. Waterproof, rugged, and built to last, these boots provide exceptional grip and ankle support. Adventure awaits.",
+    "price": 15999,
+    "brand": "RidgeLine",
+    "category": "boots",
+    "sizes": ["9", "10", "11", "12", "13"],
+    "images": [
+      "https://picsum.photos/seed/terraflex-boot-1/400/500",
+      "https://picsum.photos/seed/terraflex-boot-2/400/500",
+      "https://picsum.photos/seed/terraflex-boot-3/400/500"
+    ],
+    "stock": 25,
+    "isFeatured": true
+  },
+  {
+    "name": "Oasis Summer Breeze Sandal",
+    "description": "Keep cool and comfortable with the Oasis Summer Breeze Sandal. Made with soft, genuine leather and a cushioned footbed, they're the perfect companion for sunny days and beach trips.",
+    "price": 4999,
+    "brand": "Oasis",
+    "category": "sandals",
+    "sizes": ["6", "7", "8", "9", "10"],
+    "images": [
+      "https://picsum.photos/seed/oasis-sandal-1/400/500"
+    ],
+    "stock": 80
+  },
+  {
+    "name": "Metro Loafer Classic",
+    "description": "Timeless elegance meets modern comfort. The Metro Loafer is crafted from premium suede and features a minimalist design, making it a versatile choice for formal events or smart-casual outings.",
+    "price": 14999,
+    "brand": "Metro",
+    "category": "formal",
+    "sizes": ["8", "9", "10", "11"],
+    "images": [
+      "https://picsum.photos/seed/metro-loafer-1/400/500",
+      "https://picsum.photos/seed/metro-loafer-2/400/500"
+    ],
+    "stock": 40
+  },
+  {
+    "name": "Vibe Cityscape Casual",
+    "description": "Your go-to shoe for everyday style. The Vibe Cityscape combines a classic silhouette with a durable canvas build. Simple, stylish, and incredibly comfortable for all-day wear.",
+    "price": 7499,
+    "brand": "Vibe",
+    "category": "casual",
+    "sizes": ["7", "8", "9", "10", "11", "12"],
+    "images": [
+      "https://picsum.photos/seed/vibe-casual-1/400/500",
+      "https://picsum.photos/seed/vibe-casual-2/400/500"
+    ],
+    "stock": 120,
+    "isFeatured": true
+  },
+  {
+    "name": "SkyFlex Aero-Knit 2.0",
+    "description": "Lighter than air. The Aero-Knit 2.0 features a revolutionary one-piece upper that adapts to your foot for a sock-like fit. Feel the freedom of movement.",
+    "price": 13499,
+    "brand": "SkyFlex",
+    "category": "sneakers",
+    "sizes": ["8", "9", "10", "11"],
+    "images": [
+      "https://picsum.photos/seed/aeroknit-1/400/500",
+      "https://picsum.photos/seed/aeroknit-2/400/500"
+    ],
+    "stock": 60
+  },
+  {
+    "name": "RidgeLine Alpine Hiker",
+    "description": "Built for the highest peaks. The Alpine Hiker features advanced insulation, superior waterproofing, and a Vibram outsole for unmatched performance in extreme conditions.",
+    "price": 19999,
+    "brand": "RidgeLine",
+    "category": "boots",
+    "sizes": ["9", "10", "11", "12"],
+    "images": [
+      "https://picsum.photos/seed/alpine-hiker-1/400/500"
+    ],
+    "stock": 15
+  },
+  {
+    "name": "Oasis Riverside Flip-Flop",
+    "description": "Simplicity at its best. The Riverside Flip-Flop is quick-drying, lightweight, and features a textured footbed for non-slip comfort. Perfect for the pool or a casual stroll.",
+    "price": 2499,
+    "brand": "Oasis",
+    "category": "sandals",
+    "sizes": ["7", "8", "9", "10", "11", "12"],
+    "images": [
+      "https://picsum.photos/seed/riverside-flip-1/400/500",
+      "https://picsum.photos/seed/riverside-flip-2/400/500"
+    ],
+    "stock": 200
+  },
+  {
+    "name": "Metro Executive Wingtip",
+    "description": "Command the boardroom with the Executive Wingtip. Meticulously crafted from full-grain leather with classic brogue detailing, this shoe is the epitome of professional sophistication.",
+    "price": 17999,
+    "brand": "Metro",
+    "category": "formal",
+    "sizes": ["8.5", "9", "9.5", "10", "10.5", "11"],
+    "images": [
+      "https://picsum.photos/seed/wingtip-1/400/500"
+    ],
+    "stock": 30,
+    "isFeatured": true
+  },
+  {
+    "name": "Vibe Retro Court '88",
+    "description": "A throwback to classic basketball style. The Retro Court '88 brings vintage cool to the streets with its leather construction and iconic high-top design.",
+    "price": 8999,
+    "brand": "Vibe",
+    "category": "sneakers",
+    "sizes": ["8", "9", "10", "11", "12"],
+    "images": [
+      "https://picsum.photos/seed/retro-court-1/400/500",
+      "https://picsum.photos/seed/retro-court-2/400/500"
+    ],
+    "stock": 75
+  },
+  {
+    "name": "SkyFlex Cloud Cruiser",
+    "description": "Walk on clouds. The Cloud Cruiser is our most cushioned shoe ever, designed for ultimate shock absorption and all-day comfort. Your feet will thank you.",
+    "price": 11499,
+    "brand": "SkyFlex",
+    "category": "casual",
+    "sizes": ["7", "8", "9", "10", "11"],
+    "images": [
+      "https://picsum.photos/seed/cloud-cruiser-1/400/500",
+      "https://picsum.photos/seed/cloud-cruiser-2/400/500"
+    ],
+    "stock": 90,
+    "isFeatured": true
+  }
+]

@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  /* ... your existing color palette ... */
+  --color-brand-primary: oklch(66.9% 0.19 253.33);
+  --color-brand-secondary: oklch(75% 0.18 300);
+  --color-text-light: oklch(18.52% 0.01 253.33);
+  --color-text-dark: oklch(93.75% 0.01 253.33);
+  --color-bg-light: oklch(98% 0 0);
+  --color-bg-dark: oklch(14% 0.01 253.33);
+  --color-surface-light: oklch(100% 0 0);
+  --color-surface-dark: oklch(18% 0.01 253.33);
+  --color-border-light: oklch(90% 0 0);
+  --color-border-dark: oklch(25% 0.01 253.33);
+}
+
+@layer base {
+  :root {
+    --text-color: var(--color-text-light);
+    --bg-color: var(--color-bg-light);
+    --surface-color: var(--color-surface-light);
+    --border-color: var(--color-border-light);
+    --brand-color: var(--color-brand-primary);
+
+    /* --- ADD THIS LINE --- */
+    /* In light mode, placeholder is the main text color at 60% opacity */
+    --placeholder-color: oklch(from var(--color-text-light) l c h / 60%);
+  }
+
+  .dark {
+    --text-color: var(--color-text-dark);
+    --bg-color: var(--color-bg-dark);
+    --surface-color: var(--color-surface-dark);
+    --border-color: var(--color-border-dark);
+    --brand-color: var(--color-brand-primary);
+
+    /* --- ADD THIS LINE --- */
+    /* In dark mode, placeholder is the main text color at 50% opacity */
+    --placeholder-color: oklch(from var(--color-text-dark) l c h / 50%);
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition-property: color, background-color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+  
+  /* --- ADD THIS ENTIRE BLOCK --- */
+  /* This globally styles all placeholders in your application */
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--placeholder-color);
+    opacity: 1; /* Ensure opacity is not overridden by browser defaults */
+  }
+}
