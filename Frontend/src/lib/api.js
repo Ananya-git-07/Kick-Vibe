@@ -1,110 +1,148 @@
 import axios from 'axios';
 
 // Create a single, configured Axios instance.
-// It uses the VITE_BACKEND_URL from your .env file to set the base URL.
-// This ensures that all API calls are directed to your backend server.
 const api = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/v1`,
-  withCredentials: true, // This is crucial for sending/receiving cookies for authentication
+  withCredentials: true, // Crucial for sending/receiving cookies for authentication
 });
 
 
-// --- Shoe Endpoints ---
+// --- Axios Interceptor for Token Refresh ---
+// This is the magic that will handle token expiration automatically.
+api.interceptors.response.use(
+  (response) => response, // Directly return successful responses
+  async (error) => {
+    const originalRequest = error.config;
 
-/**
- * Fetches the list of featured shoes from the backend.
- * Corresponds to the GET /shoes/featured endpoint.
- */
+    // Check if the error is a 401 Unauthorized and we haven't already retried
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true; // Mark that we've retried this request
+
+      try {
+        // Attempt to refresh the access token
+        await api.post('/users/refresh-token');
+        
+        // If the refresh is successful, Axios will have the new token in its cookies.
+        // We can now retry the original request that failed.
+        return api(originalRequest);
+      } catch (refreshError) {
+        // If refreshing the token fails, it means the user's session is truly expired.
+        // We should redirect them to the login page.
+        // You can also dispatch a custom "logout" event here if using a global event bus.
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      }
+    }
+
+    // For any other errors, just pass them along.
+    return Promise.reject(error);
+  }
+);
+
+
+// --- Shoe Endpoints ---
 export const getFeaturedShoes = async () => {
   const response = await api.get('/shoes/featured');
   return response.data.data;
 };
 
-/**
- * Fetches the list of new arrival shoes from the backend.
- * Corresponds to the GET /shoes/new-arrivals endpoint.
- */
 export const getNewArrivals = async () => {
   const response = await api.get('/shoes/new-arrivals');
   return response.data.data;
 };
 
-/**
- * Fetches all shoes with optional filtering.
- * Corresponds to the GET /shoes endpoint.
- * @param {object} filters - An object containing filter queries (e.g., { category: 'sneakers' })
- */
 export const getAllShoes = async (filters = {}) => {
-  const response = await api.get('/shoes', {
-    params: filters // Axios converts this to URL query parameters
-  });
+  const response = await api.get('/shoes', { params: filters });
   return response.data.data;
 };
 
-/**
- * Fetches a single shoe by its ID.
- * Corresponds to the GET /shoes/:id endpoint.
- * @param {string} shoeId - The ID of the shoe to fetch.
- */
 export const getShoeById = async (shoeId) => {
   const response = await api.get(`/shoes/${shoeId}`);
   return response.data.data;
 };
 
+// NEW: Search for shoes
+export const searchShoes = async (query) => {
+  const response = await api.get('/shoes/search', { params: { q: query } });
+  return response.data.data;
+}
+
 
 // --- Cart Endpoints ---
-
-/**
- * Fetches the user's current cart from the backend.
- */
 export const getCart = async () => {
   const response = await api.get('/cart');
   return response.data.data;
 };
 
-/**
- * Adds an item to the user's cart.
- * @param {object} item - { shoeId, quantity, size }
- */
 export const addItemToCart = async (item) => {
   const response = await api.post('/cart/add', item);
   return response.data.data;
 };
 
-/**
- * Updates the quantity of an item in the cart.
- * @param {string} itemId - The ID of the cart item.
- * @param {number} quantity - The new quantity.
- */
 export const updateCartItem = async (itemId, quantity) => {
   const response = await api.patch(`/cart/item/${itemId}`, { quantity });
   return response.data.data;
 };
 
-/**
- * Removes an item from the user's cart.
- * @param {string} itemId - The ID of the cart item to remove.
- */
 export const removeItemFromCart = async (itemId) => {
   const response = await api.delete(`/cart/item/${itemId}`);
   return response.data.data;
 };
 
 
-// --- Order Endpoint ---
-
-/**
- * Creates a new order from the user's cart.
- * @param {object} orderDetails - { shippingAddress, paymentMethod }
- */
+// --- Order Endpoints ---
 export const createOrder = async (orderDetails) => {
   const response = await api.post('/orders', orderDetails);
   return response.data.data;
 };
 
+// NEW: Get user's order history
+export const getMyOrders = async () => {
+  const response = await api.get('/orders/history');
+  return response.data.data;
+}
+
+// NEW: Get a single order by ID
+export const getOrderById = async (orderId) => {
+  const response = await api.get(`/orders/${orderId}`);
+  return response.data.data;
+}
 
 
+// --- Wishlist Endpoints (NEW) ---
+export const getWishlist = async () => {
+  const response = await api.get('/wishlist');
+  return response.data.data;
+};
 
-// We don't need a default export if we are exporting named functions,
-// but exporting the instance can be useful for direct use elsewhere.
+export const toggleWishlistItem = async (shoeId) => {
+  const response = await api.post(`/wishlist/toggle/${shoeId}`);
+  return response.data.data;
+};
+
+
+// --- Review Endpoints (NEW) ---
+export const getShoeReviews = async (shoeId) => {
+  const response = await api.get(`/reviews/shoe/${shoeId}`);
+  return response.data.data;
+};
+
+export const createReview = async (shoeId, reviewData) => {
+  const response = await api.post(`/reviews/create/${shoeId}`, reviewData);
+  return response.data.data;
+};
+
+
+// --- User Profile Endpoints (NEW) ---
+export const updateAccountDetails = async (userData) => {
+  const response = await api.patch('/users/update-account', userData);
+  return response.data.data;
+};
+
+export const changePassword = async (passwordData) => {
+  const response = await api.post('/users/change-password', passwordData);
+  return response.data.data;
+};
+
+
 export default api;

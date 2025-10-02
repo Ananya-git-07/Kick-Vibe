@@ -1,94 +1,111 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import ProductCard from '../components/ProductCard';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getShoeById } from '../lib/api';
+import { useAuth } from '../hooks/useAuth';
+import { useCart } from '../hooks/useCart';
 import Loader from '../components/Loader';
-import FilterSidebar from '../components/FilterSidebar';
-import { getAllShoes } from '../lib/api';
+import Button from '../components/Button';
+import ProductImageGallery from '../components/ProductImageGallery';
+import ReviewsSection from '../components/ReviewsSection'; // <-- Import ReviewsSection
 
-const ProductsPage = () => {
-  const [shoes, setShoes] = useState([]);
+const ProductPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { addItem } = useCart();
+
+  const [shoe, setShoe] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // Use URL search params to manage filter state
-  const location = useLocation();
-  const navigate = useNavigate();
-  const searchParams = new URLSearchParams(location.search);
-  
-  const [filters, setFilters] = useState({
-    category: searchParams.get('category') || '',
-    brand: searchParams.get('brand') || '',
-    // Add more filters here (e.g., sort, price)
-  });
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
-    const fetchShoes = async () => {
+    const fetchShoe = async () => {
       try {
         setIsLoading(true);
-        setError(null);
-
-        // Construct the query parameters from the filter state
-        const queryParams = new URLSearchParams();
-        if (filters.category) queryParams.set('category', filters.category);
-        if (filters.brand) queryParams.set('brand', filters.brand);
-
-        // Update the browser's URL to reflect the current filters
-        navigate(`?${queryParams.toString()}`, { replace: true });
-        
-        // Fetch the shoes using the filters object
-        const result = await getAllShoes(filters);
-        setShoes(result.shoes); // The API returns an object { shoes: [...], ... }
+        const shoeData = await getShoeById(id);
+        setShoe(shoeData);
+        if (shoeData.sizes && shoeData.sizes.length > 0) {
+          setSelectedSize(shoeData.sizes[0]);
+        }
       } catch (err) {
-        setError("Failed to fetch products. Please try again.");
+        setError("Product not found or an error occurred.");
       } finally {
         setIsLoading(false);
       }
     };
+    fetchShoe();
+  }, [id]);
 
-    fetchShoes();
-  }, [filters, navigate]); // Re-run the effect whenever filters change
-
-  const handleFilterChange = (filterName, value) => {
-    setFilters(prevFilters => ({
-      ...prevFilters,
-      [filterName]: value,
-    }));
+  const handleAddToCart = async () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    if (!selectedSize) {
+      alert("Please select a size.");
+      return;
+    }
+    setIsAdding(true);
+    try {
+      await addItem({ shoeId: shoe._id, quantity: 1, size: selectedSize });
+      alert(`Success! "${shoe.name}" has been added to your cart.`);
+    } catch (error) {
+      alert(error.message || "Could not add item to cart.");
+    } finally {
+      setIsAdding(false);
+    }
   };
 
+  const formatPrice = (amount) => {
+    return amount.toLocaleString('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 });
+  };
+
+  if (isLoading) return <div className="flex h-[60vh] items-center justify-center"><Loader size="lg" /></div>;
+  if (error) return <div className="text-center py-20 text-red-500">{error}</div>;
+  if (!shoe) return <div className="text-center py-20">Product details could not be loaded.</div>;
+
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-extrabold tracking-tighter">All Kicks</h1>
-        <p className="mt-4 max-w-2xl mx-auto text-(--text-color)/60">
-          Browse our entire collection. Use the filters to find your perfect pair.
-        </p>
-      </div>
-
-      <div className="flex flex-col lg:flex-row">
-        {/* Filters */}
-        <FilterSidebar filters={filters} onFilterChange={handleFilterChange} />
-
-        {/* Product Grid */}
-        <div className="w-full mt-10 lg:mt-0">
-          {isLoading ? (
-            <Loader size="lg" />
-          ) : error ? (
-            <div className="text-center text-red-500">{error}</div>
-          ) : shoes.length > 0 ? (
-            <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
-              {shoes.map((shoe) => (
-                <ProductCard key={shoe._id} shoe={shoe} />
+    <div className="container mx-auto max-w-7xl px-4 py-12 sm:py-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+        <ProductImageGallery images={shoe.images} />
+        <div>
+          <p className="text-sm font-medium text-(--brand-color) uppercase tracking-wider">{shoe.brand}</p>
+          <h1 className="mt-2 text-3xl sm:text-4xl font-extrabold tracking-tight">{shoe.name}</h1>
+          <p className="mt-4 text-3xl font-bold">{formatPrice(shoe.price)}</p>
+          <div className="mt-8 border-t border-(--border-color) pt-8">
+            <h2 className="text-lg font-semibold">Description</h2>
+            <p className="mt-2 text-(--text-color)/70 whitespace-pre-wrap leading-relaxed">{shoe.description}</p>
+          </div>
+          <div className="mt-8">
+            <h2 className="text-lg font-semibold">Select Size</h2>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {shoe.sizes.map((size) => (
+                <button
+                  key={size}
+                  onClick={() => setSelectedSize(size)}
+                  className={`px-4 py-2 rounded-md border text-sm font-medium transition-all duration-200 ${selectedSize === size ? 'bg-(--brand-color) text-white border-(--brand-color) ring-2 ring-offset-2 ring-offset-(--bg-color) ring-(--brand-color)' : 'bg-(--surface-color) border-(--border-color) hover:bg-(--border-light) dark:hover:bg-(--border-dark)'}`}
+                >
+                  {size}
+                </button>
               ))}
             </div>
-          ) : (
-            <div className="text-center text-(--text-color)/60">
-              No products found matching your criteria.
-            </div>
-          )}
+          </div>
+          <div className="mt-10">
+            <Button onClick={handleAddToCart} className="w-full text-base py-4" disabled={isAdding || shoe.stock === 0}>
+              {shoe.stock === 0 ? 'Out of Stock' : (isAdding ? 'Adding...' : 'Add to Cart')}
+            </Button>
+          </div>
+          <p className="mt-4 text-sm text-center text-(--text-color)/60">
+            {shoe.stock > 0 ? `Hurry! Only ${shoe.stock} left in stock.` : 'This item is currently out of stock.'}
+          </p>
         </div>
       </div>
+      {/* Add the ReviewsSection component here */}
+      <ReviewsSection shoeId={id} />
     </div>
   );
 };
 
-export default ProductsPage;
+export default ProductPage;
