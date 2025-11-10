@@ -1,12 +1,21 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const ProductImageGallery = ({ images = [] }) => {
-  // If there are no images, show a placeholder
   if (!images || images.length === 0) {
     images = ['https://via.placeholder.com/600x750.png?text=No+Image'];
   }
 
   const [mainImage, setMainImage] = useState(images[0]);
+  const [isZooming, setIsZooming] = useState(false);
+
+  // --- Logic for zoom effect ---
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    e.currentTarget.style.backgroundPosition = `${x}% ${y}%`;
+  };
 
   return (
     <div className="flex flex-col-reverse md:flex-row gap-4">
@@ -23,14 +32,30 @@ const ProductImageGallery = ({ images = [] }) => {
         ))}
       </div>
       
-      {/* Main Image */}
-      <div className="flex-1 aspect-[4/5] w-full overflow-hidden rounded-lg bg-(--border-light) dark:bg-(--border-dark)">
+      {/* Main Image with Zoom */}
+      <motion.div
+        className="flex-1 aspect-[4/5] w-full overflow-hidden rounded-lg bg-(--border-light) dark:bg-(--border-dark) cursor-zoom-in"
+        style={{
+          backgroundImage: `url(${mainImage})`,
+          backgroundSize: isZooming ? '200%' : 'cover', // Zoom factor
+          backgroundRepeat: 'no-repeat',
+        }}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsZooming(true)}
+        onMouseLeave={() => {
+          setIsZooming(false);
+          // Reset background position
+          event.currentTarget.style.backgroundPosition = 'center center';
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        {/* We use the img tag for accessibility and as a fallback, but hide it visually */}
         <img
           src={mainImage}
           alt="Main product"
-          className="h-full w-full object-cover object-center"
+          className="h-full w-full object-cover object-center opacity-0" // Hide the actual image
         />
-      </div>
+      </motion.div>
     </div>
   );
 };

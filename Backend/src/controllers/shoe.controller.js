@@ -1,21 +1,17 @@
 import {asyncHandler} from "../utils/asyncHandler.js";
-
 import { ApiError } from "../utils/errorHandler.js";
 import { Shoe } from "../models/shoe.model.js";
-
-import { uploadOnCloudinary } from "../utils/Cloudinary.js";  // ✅ better
-  // ✅ correct
- // ✅ correct
-
+import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 // Controller to add a new shoe
 const addShoe = asyncHandler(async (req, res) => {
-    // --- THIS IS THE DEBUGGING LINE ---
-    console.log("DATA RECEIVED BY CONTROLLER:", req.body); 
-    // ------------------------------------
+    // --- SECURITY CHECK ---
+    if (req.user?.role !== 'admin') {
+        throw new ApiError(403, "Admin access required.");
+    }
 
-    const { name, description, price, brand, category, sizes, stock } = req.body;
+    const { name, description, price, brand, category, sizes, stock, isFeatured } = req.body;
 
     if (!name || !description || !price || !brand || !category || !sizes) {
         throw new ApiError(400, "All fields except stock are required");
@@ -44,17 +40,15 @@ const addShoe = asyncHandler(async (req, res) => {
         price,
         brand,
         category,
-        sizes: sizes.split(","), // Assuming sizes are comma-separated string
+        sizes: sizes.split(",").map(s => s.trim()), // Clean up sizes
         images: imageUrls,
         stock,
+        isFeatured: isFeatured === 'true' || isFeatured === true, // Handle boolean from form data
         owner: req.user._id,
     });
 
     return res.status(201).json(new ApiResponse(201, shoe, "Shoe added successfully"));
 });
-
-
-  
 
 // Controller to get all shoes with filtering and pagination
 const getAllShoes = asyncHandler(async (req, res) => {
@@ -70,6 +64,7 @@ const getAllShoes = asyncHandler(async (req, res) => {
     }
 
     const shoes = await Shoe.find(query)
+        .sort({ createdAt: -1 }) // Sort by newest first
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
@@ -87,75 +82,51 @@ const getAllShoes = asyncHandler(async (req, res) => {
 const getShoeById = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const shoe = await Shoe.findById(id);
-
-    if (!shoe) {
-        throw new ApiError(404, "Shoe not found");
-    }
-
+    if (!shoe) { throw new ApiError(404, "Shoe not found"); }
     return res.status(200).json(new ApiResponse(200, shoe, "Shoe retrieved successfully"));
 });
 
 // Controller to update a shoe
 const updateShoe = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const shoe = await Shoe.findById(id);
-
-    if (!shoe) {
-        throw new ApiError(404, "Shoe not found");
+    // --- SECURITY CHECK ---
+    if (req.user?.role !== 'admin') {
+        throw new ApiError(403, "Admin access required.");
     }
     
-    // Add authorization check: only the owner can update
-    if (shoe.owner.toString() !== req.user._id.toString()) {
-        throw new ApiError(403, "You are not authorized to update this shoe");
-    }
+    const { id } = req.params;
+    const shoe = await Shoe.findById(id);
+    if (!shoe) { throw new ApiError(404, "Shoe not found"); }
 
-        const { name, description, price, brand, category, sizes, stock, isFeatured } = req.body;
-
-    // 2. Create an update object with these fields.
-    const updateData = {
-        name,
-        description,
-        price,
-        brand,
-        category,
-        sizes,
-        stock,
-        isFeatured
+    const { name, description, price, brand, category, sizes, stock, isFeatured } = req.body;
+    
+    // Create an update object, handling sizes array and boolean conversion
+    const updateData = { 
+        name, description, price, brand, category, 
+        sizes: typeof sizes === 'string' ? sizes.split(',').map(s => s.trim()) : sizes,
+        stock, 
+        isFeatured: isFeatured === 'true' || isFeatured === true
     };
-
-    // 3. (Optional but recommended) Remove any undefined properties from the update object
-    // so you don't accidentally overwrite existing values with null.
+    
     Object.keys(updateData).forEach(key => updateData[key] === undefined && delete updateData[key]);
 
-    // 4. Perform the update with the sanitized data object.
-    const updatedShoe = await Shoe.findByIdAndUpdate(
-        id,
-        { $set: updateData },
-        { new: true }
-    );
-
+    const updatedShoe = await Shoe.findByIdAndUpdate(id, { $set: updateData }, { new: true, runValidators: true });
     return res.status(200).json(new ApiResponse(200, updatedShoe, "Shoe updated successfully"));
 });
 
 // Controller to delete a shoe
 const deleteShoe = asyncHandler(async (req, res) => {
+    // --- SECURITY CHECK ---
+    if (req.user?.role !== 'admin') {
+        throw new ApiError(403, "Admin access required.");
+    }
+    
     const { id } = req.params;
     const shoe = await Shoe.findById(id);
-
-    if (!shoe) {
-        throw new ApiError(404, "Shoe not found");
-    }
-
-    // Add authorization check: only the owner can delete
-    if (shoe.owner.toString() !== req.user._id.toString()) {
-        throw new ApiError(403, "You are not authorized to delete this shoe");
-    }
+    if (!shoe) { throw new ApiError(404, "Shoe not found"); }
 
     await Shoe.findByIdAndDelete(id);
-
     return res.status(200).json(new ApiResponse(200, {}, "Shoe deleted successfully"));
 });
-
 
 const searchShoes = asyncHandler(async (req, res) => {
     const { q } = req.query;
@@ -184,7 +155,6 @@ const getNewArrivals = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, newArrivals, "New arrivals retrieved successfully."));
 });
 
-
 const getFeaturedShoes = asyncHandler(async (req, res) => {
     const featuredShoes = await Shoe.find({ isFeatured: true })
         .limit(10); // Limit to 10 featured products
@@ -192,8 +162,6 @@ const getFeaturedShoes = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, featuredShoes, "Featured products retrieved successfully."));
 });
 
-
-// ADD THE NEW FUNCTION TO THE EXPORTS
 export {
     addShoe,
     getAllShoes,
@@ -201,8 +169,6 @@ export {
     updateShoe,
     deleteShoe,
     searchShoes,
-    getNewArrivals,     // Add this export
-    getFeaturedShoes    // Add this export
+    getNewArrivals,
+    getFeaturedShoes
 };
-
-

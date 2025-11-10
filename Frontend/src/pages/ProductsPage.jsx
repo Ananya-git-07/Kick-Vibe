@@ -1,111 +1,88 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getShoeById } from '../lib/api';
-import { useAuth } from '../hooks/useAuth';
-import { useCart } from '../hooks/useCart';
-import Loader from '../components/Loader';
-import Button from '../components/Button';
-import ProductImageGallery from '../components/ProductImageGallery';
-import ReviewsSection from '../components/ReviewsSection'; // <-- Import ReviewsSection
+import { useLocation, useNavigate } from 'react-router-dom';
+import ProductCard from '../components/ProductCard';
+import ProductCardSkeleton from '../components/ProductCardSkeleton'; // <-- IMPORT
+import FilterSidebar from '../components/FilterSidebar';
+import { getAllShoes } from '../lib/api';
 
-const ProductPage = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-  const { addItem } = useCart();
-
-  const [shoe, setShoe] = useState(null);
+const ProductsPage = () => {
+  const [shoes, setShoes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedSize, setSelectedSize] = useState(null);
-  const [isAdding, setIsAdding] = useState(false);
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  
+  const [filters, setFilters] = useState({
+    category: searchParams.get('category') || '',
+    brand: searchParams.get('brand') || '',
+  });
 
   useEffect(() => {
-    const fetchShoe = async () => {
-      try {
+    const fetchShoes = async () => {
+      // Don't set loading to true if it's just a filter change on already loaded data
+      // For a better UX, we only show the big skeleton screen on initial load.
+      // A small spinner could be added for subsequent filter changes if desired.
+      if (shoes.length === 0) {
         setIsLoading(true);
-        const shoeData = await getShoeById(id);
-        setShoe(shoeData);
-        if (shoeData.sizes && shoeData.sizes.length > 0) {
-          setSelectedSize(shoeData.sizes[0]);
-        }
+      }
+      try {
+        setError(null);
+        const queryParams = new URLSearchParams();
+        if (filters.category) queryParams.set('category', filters.category);
+        if (filters.brand) queryParams.set('brand', filters.brand);
+
+        navigate(`?${queryParams.toString()}`, { replace: true });
+        
+        const result = await getAllShoes(filters);
+        setShoes(result.shoes);
       } catch (err) {
-        setError("Product not found or an error occurred.");
+        setError("Failed to fetch products. Please try again.");
       } finally {
         setIsLoading(false);
       }
     };
-    fetchShoe();
-  }, [id]);
 
-  const handleAddToCart = async () => {
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
-    if (!selectedSize) {
-      alert("Please select a size.");
-      return;
-    }
-    setIsAdding(true);
-    try {
-      await addItem({ shoeId: shoe._id, quantity: 1, size: selectedSize });
-      alert(`Success! "${shoe.name}" has been added to your cart.`);
-    } catch (error) {
-      alert(error.message || "Could not add item to cart.");
-    } finally {
-      setIsAdding(false);
-    }
+    fetchShoes();
+  }, [filters, navigate]);
+
+  const handleFilterChange = (filterName, value) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [filterName]: value,
+    }));
   };
-
-  const formatPrice = (amount) => {
-    return amount.toLocaleString('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 });
-  };
-
-  if (isLoading) return <div className="flex h-[60vh] items-center justify-center"><Loader size="lg" /></div>;
-  if (error) return <div className="text-center py-20 text-red-500">{error}</div>;
-  if (!shoe) return <div className="text-center py-20">Product details could not be loaded.</div>;
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-12 sm:py-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
-        <ProductImageGallery images={shoe.images} />
-        <div>
-          <p className="text-sm font-medium text-(--brand-color) uppercase tracking-wider">{shoe.brand}</p>
-          <h1 className="mt-2 text-3xl sm:text-4xl font-extrabold tracking-tight">{shoe.name}</h1>
-          <p className="mt-4 text-3xl font-bold">{formatPrice(shoe.price)}</p>
-          <div className="mt-8 border-t border-(--border-color) pt-8">
-            <h2 className="text-lg font-semibold">Description</h2>
-            <p className="mt-2 text-(--text-color)/70 whitespace-pre-wrap leading-relaxed">{shoe.description}</p>
-          </div>
-          <div className="mt-8">
-            <h2 className="text-lg font-semibold">Select Size</h2>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {shoe.sizes.map((size) => (
-                <button
-                  key={size}
-                  onClick={() => setSelectedSize(size)}
-                  className={`px-4 py-2 rounded-md border text-sm font-medium transition-all duration-200 ${selectedSize === size ? 'bg-(--brand-color) text-white border-(--brand-color) ring-2 ring-offset-2 ring-offset-(--bg-color) ring-(--brand-color)' : 'bg-(--surface-color) border-(--border-color) hover:bg-(--border-light) dark:hover:bg-(--border-dark)'}`}
-                >
-                  {size}
-                </button>
-              ))}
+    <div className="container mx-auto px-4 py-12">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-extrabold tracking-tighter">All Kicks</h1>
+        <p className="mt-4 max-w-2xl mx-auto text-(--text-color)/60">
+          Browse our entire collection. Use the filters to find your perfect pair.
+        </p>
+      </div>
+
+      <div className="flex flex-col lg:flex-row">
+        <FilterSidebar filters={filters} onFilterChange={handleFilterChange} />
+
+        <div className="w-full mt-10 lg:mt-0 lg:pl-8"> {/* Added lg:pl-8 */}
+          {error ? (
+            <div className="text-center text-red-500">{error}</div>
+          ) : (
+            <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
+              {isLoading 
+                ? Array.from({ length: 9 }).map((_, index) => <ProductCardSkeleton key={index} />)
+                : shoes.length > 0 
+                  ? shoes.map((shoe) => <ProductCard key={shoe._id} shoe={shoe} />)
+                  : <div className="text-center text-(--text-color)/60 sm:col-span-2 xl:col-span-3">No products found.</div>
+              }
             </div>
-          </div>
-          <div className="mt-10">
-            <Button onClick={handleAddToCart} className="w-full text-base py-4" disabled={isAdding || shoe.stock === 0}>
-              {shoe.stock === 0 ? 'Out of Stock' : (isAdding ? 'Adding...' : 'Add to Cart')}
-            </Button>
-          </div>
-          <p className="mt-4 text-sm text-center text-(--text-color)/60">
-            {shoe.stock > 0 ? `Hurry! Only ${shoe.stock} left in stock.` : 'This item is currently out of stock.'}
-          </p>
+          )}
         </div>
       </div>
-      {/* Add the ReviewsSection component here */}
-      <ReviewsSection shoeId={id} />
     </div>
   );
 };
 
-export default ProductPage;
+export default ProductsPage;

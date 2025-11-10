@@ -1,11 +1,31 @@
+import { useState, useEffect } from 'react'; // <-- IMPORT useState, useEffect
 import { useCart } from '../hooks/useCart';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import Button from '../components/Button';
-import { Trash2 } from 'lucide-react';
+import { Trash2, ShoppingBag } from 'lucide-react'; // <-- IMPORT ShoppingBag
+import { motion, AnimatePresence } from 'framer-motion';
+import { getFeaturedShoes } from '../lib/api'; // <-- IMPORT API
+import ProductCard from '../components/ProductCard'; // <-- IMPORT ProductCard
 
 const CartPage = () => {
   const { cart, loading, error, updateItem, removeItem, cartTotalPrice } = useCart();
+  const [suggestions, setSuggestions] = useState([]); // <-- State for suggestions
+
+  // Fetch suggestions if the cart is empty
+  useEffect(() => {
+    if (!loading && (!cart || cart.items.length === 0)) {
+      const fetchSuggestions = async () => {
+        try {
+          const featured = await getFeaturedShoes();
+          setSuggestions(featured.slice(0, 4) || []); // Take first 4
+        } catch (err) {
+          console.error("Could not fetch suggestions for empty cart");
+        }
+      };
+      fetchSuggestions();
+    }
+  }, [cart, loading]);
 
   // Function to format price to INR
   const formatPrice = (amount) => {
@@ -16,14 +36,28 @@ const CartPage = () => {
     });
   };
 
-  if (loading) return <Loader size="lg" />;
+ if (loading) return <Loader size="lg" />;
   if (error) return <div className="text-center py-20 text-red-500">{error}</div>;
+
+  // --- ENHANCED EMPTY STATE ---
   if (!cart || cart.items.length === 0) {
     return (
-      <div className="text-center py-20">
-        <h1 className="text-3xl font-bold">Your Cart is Empty</h1>
-        <p className="mt-4 text-(--text-color)/60">Looks like you haven't added anything to your cart yet.</p>
-        <Button to="/products" className="mt-6">Continue Shopping</Button>
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center py-20 bg-(--surface-color) border-2 border-dashed border-(--border-color) rounded-2xl">
+          <ShoppingBag className="mx-auto h-16 w-16 text-(--text-color)/30" />
+          <h1 className="mt-6 text-3xl font-bold">Your Cart is Empty</h1>
+          <p className="mt-4 text-(--text-color)/60">Looks like you haven't added anything to your cart yet.</p>
+          <Button to="/products" className="mt-8">Continue Shopping</Button>
+        </div>
+        
+        {suggestions.length > 0 && (
+          <div className="mt-24">
+            <h2 className="text-2xl font-bold text-center mb-8">You Might Like These</h2>
+            <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+              {suggestions.map(shoe => <ProductCard key={shoe._id} shoe={shoe} />)}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
