@@ -21,9 +21,6 @@
     --surface-color: var(--color-surface-light);
     --border-color: var(--color-border-light);
     --brand-color: var(--color-brand-primary);
-
-    /* --- ADD THIS LINE --- */
-    /* In light mode, placeholder is the main text color at 60% opacity */
     --placeholder-color: oklch(from var(--color-text-light) l c h / 60%);
   }
 
@@ -33,25 +30,40 @@
     --surface-color: var(--color-surface-dark);
     --border-color: var(--color-border-dark);
     --brand-color: var(--color-brand-primary);
-
-    /* --- ADD THIS LINE --- */
-    /* In dark mode, placeholder is the main text color at 50% opacity */
     --placeholder-color: oklch(from var(--color-text-dark) l c h / 50%);
   }
 
   body {
+    /* --- MODIFIED BLOCK --- */
     background-color: var(--bg-color);
     color: var(--text-color);
+    /* Add a subtle gradient background */
+    background-image: radial-gradient(circle at 1px 1px, oklch(from var(--border-color) l c h / 50%) 1px, transparent 0);
+    background-size: 2rem 2rem;
+    -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit browsers */
+    -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
     transition-property: color, background-color;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
   }
   
-  /* --- ADD THIS ENTIRE BLOCK --- */
-  /* This globally styles all placeholders in your application */
   input::placeholder,
   textarea::placeholder {
     color: var(--placeholder-color);
-    opacity: 1; /* Ensure opacity is not overridden by browser defaults */
+    opacity: 1;
+  }
+
+  /* --- ADD THIS BLOCK --- */
+  /* Add a smooth scroll behavior for the whole app */
+  html {
+    scroll-behavior: smooth;
+  }
+  .scrollbar-hide {
+    /* For Firefox */
+    scrollbar-width: none;
+    /* For Chrome, Safari, and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }

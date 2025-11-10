@@ -29,13 +29,17 @@ const userSchema = new Schema(
             type: String, // cloudinary url
             required: true,
         },
-        // ADD THIS WISHLIST FIELD
         wishlist: [
             {
                 type: Schema.Types.ObjectId,
                 ref: "Shoe"
             }
         ],
+        role: {
+            type: String,
+            enum: ['user', 'admin'],
+            default: 'user'
+        },
         password: {
             type: String,
             required: [true, 'Password is required']
@@ -50,7 +54,6 @@ const userSchema = new Schema(
     }
 )
 
-// ... keep all the existing methods (pre, isPasswordCorrect, generateAccessToken, etc.) ...
 userSchema.pre("save", async function (next) {
     if(!this.isModified("password")) return next();
 
@@ -62,13 +65,15 @@ userSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password, this.password)
 }
 
+// --- THIS IS THE FIX ---
 userSchema.methods.generateAccessToken = function(){
     return jwt.sign(
         {
             _id: this._id,
             email: this.email,
             username: this.username,
-            fullName: this.fullName
+            fullName: this.fullName,
+            role: this.role // <-- ADD THIS LINE
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
@@ -76,11 +81,11 @@ userSchema.methods.generateAccessToken = function(){
         }
     )
 }
+
 userSchema.methods.generateRefreshToken = function(){
     return jwt.sign(
         {
             _id: this._id,
-
         },
         process.env.REFRESH_TOKEN_SECRET,
         {

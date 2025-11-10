@@ -3,44 +3,31 @@ import axios from 'axios';
 // Create a single, configured Axios instance.
 const api = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/v1`,
-  withCredentials: true, // Crucial for sending/receiving cookies for authentication
+  withCredentials: true, // Crucial for cookies
 });
 
+// --- User Endpoints ---
 
-// --- Axios Interceptor for Token Refresh ---
-// This is the magic that will handle token expiration automatically.
-api.interceptors.response.use(
-  (response) => response, // Directly return successful responses
-  async (error) => {
-    const originalRequest = error.config;
+export const updateAccountDetails = async (data) => {
+  const response = await api.patch('/users/update-account', data);
+  return response.data.data;
+};
 
-    // Check if the error is a 401 Unauthorized and we haven't already retried
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // Mark that we've retried this request
+export const changePassword = async (data) => {
+  const response = await api.post('/users/change-password', data);
+  return response.data;
+};
 
-      try {
-        // Attempt to refresh the access token
-        await api.post('/users/refresh-token');
-        
-        // If the refresh is successful, Axios will have the new token in its cookies.
-        // We can now retry the original request that failed.
-        return api(originalRequest);
-      } catch (refreshError) {
-        // If refreshing the token fails, it means the user's session is truly expired.
-        // We should redirect them to the login page.
-        // You can also dispatch a custom "logout" event here if using a global event bus.
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
-    }
-
-    // For any other errors, just pass them along.
-    return Promise.reject(error);
-  }
-);
-
+// Expects FormData
+export const updateUserAvatar = async (formData) => {
+  const response = await api.patch('/users/avatar', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return response.data.data;
+};
 
 // --- Shoe Endpoints ---
+
 export const getFeaturedShoes = async () => {
   const response = await api.get('/shoes/featured');
   return response.data.data;
@@ -56,19 +43,18 @@ export const getAllShoes = async (filters = {}) => {
   return response.data.data;
 };
 
+export const searchShoes = async (query) => {
+  const response = await api.get('/shoes/search', { params: { q: query } });
+  return response.data.data;
+};
+
 export const getShoeById = async (shoeId) => {
   const response = await api.get(`/shoes/${shoeId}`);
   return response.data.data;
 };
 
-// NEW: Search for shoes
-export const searchShoes = async (query) => {
-  const response = await api.get('/shoes/search', { params: { q: query } });
-  return response.data.data;
-}
-
-
 // --- Cart Endpoints ---
+
 export const getCart = async () => {
   const response = await api.get('/cart');
   return response.data.data;
@@ -89,27 +75,20 @@ export const removeItemFromCart = async (itemId) => {
   return response.data.data;
 };
 
-
 // --- Order Endpoints ---
+
 export const createOrder = async (orderDetails) => {
   const response = await api.post('/orders', orderDetails);
   return response.data.data;
 };
 
-// NEW: Get user's order history
-export const getMyOrders = async () => {
+export const getOrderHistory = async () => {
   const response = await api.get('/orders/history');
   return response.data.data;
-}
+};
 
-// NEW: Get a single order by ID
-export const getOrderById = async (orderId) => {
-  const response = await api.get(`/orders/${orderId}`);
-  return response.data.data;
-}
+// --- Wishlist Endpoints ---
 
-
-// --- Wishlist Endpoints (NEW) ---
 export const getWishlist = async () => {
   const response = await api.get('/wishlist');
   return response.data.data;
@@ -117,32 +96,65 @@ export const getWishlist = async () => {
 
 export const toggleWishlistItem = async (shoeId) => {
   const response = await api.post(`/wishlist/toggle/${shoeId}`);
-  return response.data.data;
+  return response.data.data; // returns { isWishlisted: true/false }
 };
 
+// --- Review Endpoints ---
 
-// --- Review Endpoints (NEW) ---
 export const getShoeReviews = async (shoeId) => {
   const response = await api.get(`/reviews/shoe/${shoeId}`);
   return response.data.data;
 };
 
-export const createReview = async (shoeId, reviewData) => {
-  const response = await api.post(`/reviews/create/${shoeId}`, reviewData);
+export const createReview = async (shoeId, data) => {
+  const response = await api.post(`/reviews/create/${shoeId}`, data);
   return response.data.data;
 };
 
+export const deleteReview = async (reviewId) => {
+  const response = await api.delete(`/reviews/${reviewId}`);
+  return response.data;
+};
 
-// --- User Profile Endpoints (NEW) ---
-export const updateAccountDetails = async (userData) => {
-  const response = await api.patch('/users/update-account', userData);
+// --- Admin Endpoints (add these to the end of the file) ---
+
+// data is FormData
+export const createShoe = async (data) => {
+  const response = await api.post('/shoes/add', data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
   return response.data.data;
 };
 
-export const changePassword = async (passwordData) => {
-  const response = await api.post('/users/change-password', passwordData);
+// data is an object of fields to update
+export const updateShoeById = async (shoeId, data) => {
+  const response = await api.patch(`/shoes/${shoeId}`, data);
   return response.data.data;
 };
 
+export const deleteShoeById = async (shoeId) => {
+  const response = await api.delete(`/shoes/${shoeId}`);
+  return response.data;
+};
+
+export const adminGetAllOrders = async () => {
+    const response = await api.get('/admin/orders');
+    return response.data.data;
+};
+
+export const adminGetAllUsers = async () => {
+    const response = await api.get('/admin/users');
+    return response.data.data;
+};
+
+export const adminGetDashboardStats = async () => {
+    const response = await api.get('/admin/stats');
+    return response.data.data;
+};
+
+export const createPaymentIntent = async () => {
+  const response = await api.post('/payment/create-intent');
+  return response.data.data;
+};
 
 export default api;
