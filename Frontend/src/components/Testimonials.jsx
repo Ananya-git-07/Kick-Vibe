@@ -31,8 +31,12 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <div className="bg-(--bg-color) py-24 sm:py-32">
-      <div className="container mx-auto px-4">
+    <div className="relative bg-(--bg-color) py-24 sm:py-32 overflow-hidden">
+      {/* Floating gradient orbs */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-(--brand-color)/12 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-(--brand-secondary)/12 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      
+      <div className="container mx-auto px-4 relative z-10">
         <SectionHeader
           title="What Our Customers Say"
           subtitle="We are proud to have a vibrant community that loves our products and service."
@@ -41,23 +45,53 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={testimonial.author.name}
-              className="space-y-8 rounded-2xl bg-(--surface-color) p-8 shadow-lg shadow-black/5 dark:shadow-black/20"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="group relative space-y-6 rounded-3xl glass border border-(--border-color)/50 p-8 shadow-xl hover:shadow-2xl hover:shadow-(--brand-color)/10 transition-all duration-500 overflow-hidden"
+              initial={{ opacity: 0, y: 40, rotateX: -15 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: index * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+              whileHover={{ y: -8, scale: 1.02 }}
             >
-              <div className="flex text-yellow-400">
-                {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 fill-current" />)}
+              {/* Gradient background on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-(--brand-color)/0 via-transparent to-(--brand-secondary)/0 group-hover:from-(--brand-color)/10 group-hover:to-(--brand-secondary)/10 transition-all duration-500" />
+              
+              {/* Quote decoration */}
+              <div className="absolute top-6 left-6 text-6xl text-(--brand-color)/10 font-serif leading-none">"</div>
+              
+              <div className="relative flex gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.15 + i * 0.1, duration: 0.3 }}
+                    viewport={{ once: true }}
+                  >
+                    <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                  </motion.div>
+                ))}
               </div>
-              <blockquote className="text-lg text-(--text-color)">
-                <p>“{testimonial.body}”</p>
+              
+              <blockquote className="relative text-lg text-(--text-color) leading-relaxed">
+                <p>{testimonial.body}</p>
               </blockquote>
-              <figcaption className="flex items-center gap-x-4">
-                <img className="h-10 w-10 rounded-full bg-gray-50" src={testimonial.author.imageUrl} alt="" />
+              
+              <figcaption className="relative flex items-center gap-x-4 pt-4 border-t border-(--border-color)/40">
+                <div className="relative">
+                  <img 
+                    className="h-12 w-12 rounded-full object-cover ring-2 ring-(--border-color) group-hover:ring-(--brand-color) transition-all duration-300" 
+                    src={testimonial.author.imageUrl} 
+                    alt={testimonial.author.name} 
+                  />
+                  <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-green-500 rounded-full ring-2 ring-(--surface-color)" />
+                </div>
                 <div>
-                  <div className="font-semibold">{testimonial.author.name}</div>
-                  <div className="text-(--text-color)/60">{testimonial.author.handle}</div>
+                  <div className="font-bold text-(--text-color) group-hover:text-(--brand-color) transition-colors">
+                    {testimonial.author.name}
+                  </div>
+                  <div className="text-sm text-(--text-color)/75">
+                    {testimonial.author.handle}
+                  </div>
                 </div>
               </figcaption>
             </motion.div>

@@ -62,16 +62,19 @@ const Hero = () => {
           animate="visible"
         >
           <motion.h1
-            className="text-4xl font-extrabold tracking-tighter sm:text-5xl md:text-6xl"
-            style={{ textShadow: "1px 1px 10px oklch(from var(--brand-primary) l c h / 30%)" }}
+            className="text-4xl font-black tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl"
             variants={itemVariants}
           >
-            <span className="bg-gradient-to-r from-(--brand-color) to-(--brand-secondary) bg-clip-text text-transparent">
+            <span className="inline-block bg-gradient-to-r from-(--brand-color) via-(--brand-secondary) to-(--brand-color) bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_6s_linear_infinite]">
               Find Your
-            </span> Perfect Stride
+            </span>
+            <br />
+            <span className="bg-gradient-to-r from-(--text-color) to-(--text-color)/80 bg-clip-text text-transparent">
+              Perfect Stride
+            </span>
           </motion.h1>
 
-          <motion.p className="mt-6 text-lg text-(--text-color)/70" variants={itemVariants}>
+          <motion.p className="mt-6 text-lg text-(--text-color)" variants={itemVariants}>
             Discover the latest trends in footwear. From high-performance sneakers to timeless classics, KickVibe has it all.
           </motion.p>
           

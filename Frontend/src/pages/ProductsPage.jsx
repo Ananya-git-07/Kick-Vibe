@@ -9,6 +9,7 @@ const ProductsPage = () => {
   const [shoes, setShoes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sortBy, setSortBy] = useState('featured');
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -54,6 +55,23 @@ const ProductsPage = () => {
     }));
   };
 
+  const sortedShoes = [...shoes].sort((a, b) => {
+    switch (sortBy) {
+      case 'price-low':
+        return a.price - b.price;
+      case 'price-high':
+        return b.price - a.price;
+      case 'name-asc':
+        return a.name.localeCompare(b.name);
+      case 'name-desc':
+        return b.name.localeCompare(a.name);
+      case 'rating':
+        return (b.averageRating || 0) - (a.averageRating || 0);
+      default:
+        return 0;
+    }
+  });
+
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="text-center mb-12">
@@ -70,14 +88,40 @@ const ProductsPage = () => {
           {error ? (
             <div className="text-center text-red-500">{error}</div>
           ) : (
-            <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
-              {isLoading 
-                ? Array.from({ length: 9 }).map((_, index) => <ProductCardSkeleton key={index} />)
-                : shoes.length > 0 
-                  ? shoes.map((shoe) => <ProductCard key={shoe._id} shoe={shoe} />)
-                  : <div className="text-center text-(--text-color)/60 sm:col-span-2 xl:col-span-3">No products found.</div>
-              }
-            </div>
+            <>
+              <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
+                <p className="text-lg text-(--text-color)/75">
+                  {isLoading ? 'Loading...' : `${shoes.length} ${shoes.length === 1 ? 'product' : 'products'} available`}
+                </p>
+                <div className="flex items-center gap-2">
+                  <label htmlFor="sort" className="text-sm font-semibold text-(--text-color)">Sort by:</label>
+                  <select
+                    id="sort"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="px-4 py-2.5 rounded-lg border-2 border-(--border-color) bg-(--surface-color) text-(--text-color) text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-(--brand-color) focus:border-(--brand-color) transition-all cursor-pointer hover:border-(--brand-color) shadow-sm"
+                    style={{
+                      colorScheme: 'light dark'
+                    }}
+                  >
+                    <option value="featured" className="bg-(--surface-color) text-(--text-color)">Featured</option>
+                    <option value="price-low" className="bg-(--surface-color) text-(--text-color)">Price: Low to High</option>
+                    <option value="price-high" className="bg-(--surface-color) text-(--text-color)">Price: High to Low</option>
+                    <option value="name-asc" className="bg-(--surface-color) text-(--text-color)">Name: A to Z</option>
+                    <option value="name-desc" className="bg-(--surface-color) text-(--text-color)">Name: Z to A</option>
+                    <option value="rating" className="bg-(--surface-color) text-(--text-color)">Highest Rated</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
+                {isLoading 
+                  ? Array.from({ length: 9 }).map((_, index) => <ProductCardSkeleton key={index} />)
+                  : sortedShoes.length > 0 
+                    ? sortedShoes.map((shoe) => <ProductCard key={shoe._id} shoe={shoe} />)
+                    : <div className="text-center text-(--text-color)/60 sm:col-span-2 xl:col-span-3">No products found.</div>
+                }
+              </div>
+            </>
           )}
         </div>
       </div>

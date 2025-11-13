@@ -42,27 +42,31 @@ const NewArrivals = () => {
   return (
     <div className="bg-(--surface-color)">
       <div className="container mx-auto px-4 py-16 sm:py-24">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-end mb-12">
           <SectionHeader
             title="New Arrivals"
             subtitle="Fresh out of the box. Check out the latest styles."
           />
           {/* --- SCROLL BUTTONS --- */}
-          <div className="hidden md:flex items-center gap-2">
-            <button
+          <div className="hidden md:flex items-center gap-3">
+            <motion.button
               onClick={() => scroll('left')}
-              className="h-10 w-10 flex items-center justify-center rounded-full border border-(--border-color) bg-(--surface-color) hover:bg-(--border-light) dark:hover:bg-(--border-dark) transition-colors"
+              className="h-12 w-12 flex items-center justify-center rounded-full border-2 border-(--border-color) glass hover:border-(--brand-color) hover:text-(--brand-color) transition-all duration-300 hover:shadow-lg hover:shadow-(--brand-color)/20"
               aria-label="Scroll left"
+              whileHover={{ scale: 1.1, x: -2 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <ChevronLeft size={20} />
-            </button>
-            <button
+              <ChevronLeft size={22} strokeWidth={2.5} />
+            </motion.button>
+            <motion.button
               onClick={() => scroll('right')}
-              className="h-10 w-10 flex items-center justify-center rounded-full border border-(--border-color) bg-(--surface-color) hover:bg-(--border-light) dark:hover:bg-(--border-dark) transition-colors"
+              className="h-12 w-12 flex items-center justify-center rounded-full border-2 border-(--border-color) glass hover:border-(--brand-color) hover:text-(--brand-color) transition-all duration-300 hover:shadow-lg hover:shadow-(--brand-color)/20"
               aria-label="Scroll right"
+              whileHover={{ scale: 1.1, x: 2 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <ChevronRight size={20} />
-            </button>
+              <ChevronRight size={22} strokeWidth={2.5} />
+            </motion.button>
           </div>
         </div>
         
