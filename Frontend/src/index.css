@@ -1,17 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  /* ... your existing color palette ... */
-  --color-brand-primary: oklch(66.9% 0.19 253.33);
-  --color-brand-secondary: oklch(75% 0.18 300);
-  --color-text-light: oklch(18.52% 0.01 253.33);
-  --color-text-dark: oklch(93.75% 0.01 253.33);
-  --color-bg-light: oklch(98% 0 0);
-  --color-bg-dark: oklch(14% 0.01 253.33);
-  --color-surface-light: oklch(100% 0 0);
-  --color-surface-dark: oklch(18% 0.01 253.33);
-  --color-border-light: oklch(90% 0 0);
-  --color-border-dark: oklch(25% 0.01 253.33);
+  /* Cool Modern Theme - Cyan/Teal & Coral/Orange accent */
+  --color-brand-primary: oklch(65% 0.19 195);
+  --color-brand-secondary: oklch(70% 0.18 35);
+  --color-accent: oklch(75% 0.15 160);
+  --color-text-light: oklch(20% 0.02 220);
+  --color-text-dark: oklch(95% 0.01 220);
+  --color-bg-light: oklch(97% 0.005 220);
+  --color-bg-dark: oklch(16% 0.015 220);
+  --color-surface-light: oklch(99% 0.003 220);
+  --color-surface-dark: oklch(20% 0.02 220);
+  --color-border-light: oklch(85% 0.01 220);
+  --color-border-dark: oklch(30% 0.02 220);
 }
 
 @layer base {
@@ -21,6 +22,8 @@
     --surface-color: var(--color-surface-light);
     --border-color: var(--color-border-light);
     --brand-color: var(--color-brand-primary);
+    --brand-secondary: var(--color-brand-secondary);
+    --accent-color: var(--color-accent);
     --placeholder-color: oklch(from var(--color-text-light) l c h / 60%);
   }
 
@@ -30,21 +33,27 @@
     --surface-color: var(--color-surface-dark);
     --border-color: var(--color-border-dark);
     --brand-color: var(--color-brand-primary);
+    --brand-secondary: var(--color-brand-secondary);
+    --accent-color: var(--color-accent);
     --placeholder-color: oklch(from var(--color-text-dark) l c h / 50%);
   }
 
   body {
-    /* --- MODIFIED BLOCK --- */
     background-color: var(--bg-color);
     color: var(--text-color);
-    /* Add a subtle gradient background */
-    background-image: radial-gradient(circle at 1px 1px, oklch(from var(--border-color) l c h / 50%) 1px, transparent 0);
-    background-size: 2rem 2rem;
-    -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit browsers */
-    -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
-    transition-property: color, background-color;
+    /* Cool gradient mesh background with cyan/teal and coral accents */
+    background-image: 
+      radial-gradient(at 0% 0%, oklch(from var(--brand-color) l c h / 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, oklch(from var(--brand-secondary) l c h / 0.06) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, oklch(from var(--accent-color) l c h / 0.04) 0px, transparent 60%),
+      radial-gradient(at 100% 100%, oklch(from var(--brand-color) l c h / 0.05) 0px, transparent 50%),
+      radial-gradient(circle at 1px 1px, oklch(from var(--border-color) l c h / 15%) 1px, transparent 0);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 40px 40px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition-property: color, background-color, background-image;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
+    transition-duration: 400ms;
   }
   
   input::placeholder,
@@ -53,17 +62,133 @@
     opacity: 1;
   }
 
-  /* --- ADD THIS BLOCK --- */
-  /* Add a smooth scroll behavior for the whole app */
   html {
     scroll-behavior: smooth;
   }
+  
   .scrollbar-hide {
-    /* For Firefox */
     scrollbar-width: none;
-    /* For Chrome, Safari, and Opera */
     &::-webkit-scrollbar {
       display: none;
+    }
+  }
+
+  /* Custom scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-color);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 5px;
+    transition: background 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-color);
+  }
+}
+
+@layer utilities {
+  /* Glassmorphism effect */
+  .glass {
+    background: oklch(from var(--surface-color) l c h / 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  .dark .glass {
+    background: oklch(from var(--surface-color) l c h / 0.7);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, var(--brand-color), var(--brand-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Shimmer animation */
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .shimmer {
+    animation: shimmer 2s infinite linear;
+    background: linear-gradient(
+      90deg,
+      oklch(from var(--border-color) l c h / 0%) 0%,
+      oklch(from var(--border-color) l c h / 50%) 50%,
+      oklch(from var(--border-color) l c h / 0%) 100%
+    );
+    background-size: 1000px 100%;
+  }
+
+  /* Floating animation */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Pulse glow animation */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px oklch(from var(--brand-color) l c h / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px oklch(from var(--brand-color) l c h / 0.6);
+    }
+  }
+
+  .pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  /* Fade in up animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  /* Gradient animation */
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
     }
   }
 }
