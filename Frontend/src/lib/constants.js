@@ -6,10 +6,6 @@ export const CATEGORIES = [
   { name: "Casual", slug: "casual" },
 ];
 
-export const BRANDS = [
-  { name: "Vibe", slug: "Vibe" },
-  { name: "SkyFlex", slug: "SkyFlex" },
-  { name: "RidgeLine", slug: "RidgeLine" },
-  { name: "Oasis", slug: "Oasis" },
-  { name: "Metro", slug: "Metro" },
-];
+// Brands are now fetched dynamically from the backend
+// This is kept for backward compatibility but will be replaced by API calls
+export const BRANDS = [];

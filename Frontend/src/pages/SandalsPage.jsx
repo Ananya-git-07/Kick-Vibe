@@ -14,7 +14,7 @@ const SandalsPage = () => {
   useEffect(() => {
     const fetchSandals = async () => {
       try {
-        const response = await getAllShoes({ category: 'sandals' });
+        const response = await getAllShoes({ category: 'sandals', limit: 100 });
         setShoes(response?.shoes || []);
       } catch (err) {
         setError("Failed to fetch sandals.");

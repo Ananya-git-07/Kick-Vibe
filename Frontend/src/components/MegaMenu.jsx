@@ -1,10 +1,27 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { CATEGORIES, BRANDS } from '../lib/constants';
+import { CATEGORIES } from '../lib/constants';
 import { ArrowRight } from 'lucide-react';
+import api from '../lib/api';
 
 // Accept hover handlers as props
 const MegaMenu = ({ onMouseEnter, onMouseLeave }) => {
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await api.get('/shoes/brands');
+        setBrands(response.data.data || []);
+      } catch (error) {
+        console.error('Error fetching brands:', error);
+        setBrands([]);
+      }
+    };
+    fetchBrands();
+  }, []);
+
   return (
     <motion.div
       // Attach hover handlers to the menu itself
@@ -36,15 +53,21 @@ const MegaMenu = ({ onMouseEnter, onMouseLeave }) => {
         {/* Column 2: Brands */}
         <div className="space-y-4">
           <h3 className="font-bold text-(--brand-color) uppercase tracking-wider text-sm">Shop by Brand</h3>
-          <ul className="space-y-2">
-            {BRANDS.map(brand => (
-              <li key={brand.slug}>
-                <Link to={`/products?brand=${brand.slug}`} className="block text-(--text-color)/80 hover:text-(--text-color) hover:pl-1 transition-all">
-                  {brand.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent pr-2">
+            <ul className="space-y-2">
+              {brands.length === 0 ? (
+                <li className="text-(--text-color)/60 text-sm">No brands available</li>
+              ) : (
+                brands.map(brand => (
+                  <li key={brand.slug}>
+                    <Link to={`/products?brand=${brand.slug}`} className="block text-(--text-color)/80 hover:text-(--text-color) hover:pl-1 transition-all">
+                      {brand.name}
+                    </Link>
+                  </li>
+                ))
+              )}
+            </ul>
+          </div>
         </div>
 
         {/* Column 3 & 4: Featured Product */}
