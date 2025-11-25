@@ -113,6 +113,76 @@ const updateShoe = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, updatedShoe, "Shoe updated successfully"));
 });
 
+// Controller to update shoe images
+const updateShoeImages = asyncHandler(async (req, res) => {
+    // --- SECURITY CHECK ---
+    if (req.user?.role !== 'admin') {
+        throw new ApiError(403, "Admin access required.");
+    }
+    
+    const { id } = req.params;
+    const shoe = await Shoe.findById(id);
+    if (!shoe) { throw new ApiError(404, "Shoe not found"); }
+
+    const imageFiles = req.files?.images;
+    if (!imageFiles || imageFiles.length === 0) {
+        throw new ApiError(400, "At least one image is required");
+    }
+
+    const imageUrls = [];
+    for (const file of imageFiles) {
+        const cloudinaryResponse = await uploadOnCloudinary(file.path);
+        if (cloudinaryResponse) {
+            imageUrls.push(cloudinaryResponse.url);
+        }
+    }
+
+    if (imageUrls.length === 0) {
+        throw new ApiError(500, "Error uploading images");
+    }
+
+    const updatedShoe = await Shoe.findByIdAndUpdate(
+        id, 
+        { $set: { images: imageUrls } }, 
+        { new: true, runValidators: true }
+    );
+    
+    return res.status(200).json(new ApiResponse(200, updatedShoe, "Shoe images updated successfully"));
+});
+
+// Controller to delete specific images from a shoe
+const deleteShoeImages = asyncHandler(async (req, res) => {
+    // --- SECURITY CHECK ---
+    if (req.user?.role !== 'admin') {
+        throw new ApiError(403, "Admin access required.");
+    }
+    
+    const { id } = req.params;
+    const { imageUrls } = req.body; // Array of image URLs to delete
+    
+    const shoe = await Shoe.findById(id);
+    if (!shoe) { throw new ApiError(404, "Shoe not found"); }
+
+    if (!imageUrls || !Array.isArray(imageUrls) || imageUrls.length === 0) {
+        throw new ApiError(400, "Image URLs array is required");
+    }
+
+    // Filter out the images to be deleted
+    const remainingImages = shoe.images.filter(img => !imageUrls.includes(img));
+    
+    if (remainingImages.length === 0) {
+        throw new ApiError(400, "Cannot delete all images. At least one image must remain.");
+    }
+
+    const updatedShoe = await Shoe.findByIdAndUpdate(
+        id, 
+        { $set: { images: remainingImages } }, 
+        { new: true, runValidators: true }
+    );
+    
+    return res.status(200).json(new ApiResponse(200, updatedShoe, "Images deleted successfully"));
+});
+
 // Controller to delete a shoe
 const deleteShoe = asyncHandler(async (req, res) => {
     // --- SECURITY CHECK ---
@@ -162,13 +232,30 @@ const getFeaturedShoes = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, featuredShoes, "Featured products retrieved successfully."));
 });
 
+// Controller to get all unique brands from the database
+const getAllBrands = asyncHandler(async (req, res) => {
+    const brands = await Shoe.distinct("brand");
+    const formattedBrands = brands
+        .filter(brand => brand) // Remove empty strings
+        .sort() // Sort alphabetically
+        .map(brand => ({
+            name: brand,
+            slug: brand
+        }));
+
+    return res.status(200).json(new ApiResponse(200, formattedBrands, "Brands retrieved successfully."));
+});
+
 export {
     addShoe,
     getAllShoes,
     getShoeById,
     updateShoe,
+    updateShoeImages,
+    deleteShoeImages,
     deleteShoe,
     searchShoes,
     getNewArrivals,
-    getFeaturedShoes
+    getFeaturedShoes,
+    getAllBrands
 };

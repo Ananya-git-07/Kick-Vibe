@@ -132,6 +132,22 @@ export const updateShoeById = async (shoeId, data) => {
   return response.data.data;
 };
 
+// Update shoe images - data is FormData
+export const updateShoeImages = async (shoeId, formData) => {
+  const response = await api.patch(`/shoes/${shoeId}/images`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return response.data.data;
+};
+
+// Delete specific images from a shoe
+export const deleteShoeImages = async (shoeId, imageUrls) => {
+  const response = await api.delete(`/shoes/${shoeId}/images`, {
+    data: { imageUrls }
+  });
+  return response.data.data;
+};
+
 export const deleteShoeById = async (shoeId) => {
   const response = await api.delete(`/shoes/${shoeId}`);
   return response.data;

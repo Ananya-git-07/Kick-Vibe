@@ -3,160 +3,337 @@
     "name": "Vibe Air Strider Pro",
     "description": "Experience unparalleled comfort and style with the Vibe Air Strider Pro. Featuring a breathable mesh upper and responsive cushioning, it's perfect for both daily wear and intense workouts. The sleek design ensures you look good on the move.",
     "price": 10999,
-    "brand": "Vibe",
+    "brand": "Nike",
     "category": "sneakers",
     "sizes": ["8", "9", "10", "11", "12"],
     "images": [
-      "https://picsum.photos/seed/air-strider-1/400/500",
-      "https://picsum.photos/seed/air-strider-2/400/500",
-      "https://picsum.photos/seed/air-strider-3/400/500"
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&h=500&fit=crop"
     ],
     "stock": 50,
     "isFeatured": true
   },
   {
-    "name": "SkyFlex Runner's High",
-    "description": "Engineered for the long run. The SkyFlex Runner's High offers a lightweight frame, superior arch support, and a durable outsole for maximum traction on any surface. Push your limits with every stride.",
+    "name": "Urban Sprint Performance",
+    "description": "Engineered for the long run. The Urban Sprint offers a lightweight frame, superior arch support, and a durable outsole for maximum traction on any surface. Push your limits with every stride.",
     "price": 12499,
-    "brand": "SkyFlex",
+    "brand": "Adidas",
     "category": "sneakers",
     "sizes": ["7", "8", "9", "10", "11", "12"],
     "images": [
-      "https://picsum.photos/seed/skyflex-run-1/400/500",
-      "https://picsum.photos/seed/skyflex-run-2/400/500"
+      "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1539185441755-769473a23570?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&h=500&fit=crop"
     ],
     "stock": 35
   },
   {
+    "name": "Velocity Boost Runner",
+    "description": "Achieve your personal best with Velocity Boost. Advanced energy-return technology and adaptive fit system deliver explosive propulsion with each step. Built for speed demons and marathon champions.",
+    "price": 13999,
+    "brand": "Puma",
+    "category": "sneakers",
+    "sizes": ["8", "9", "10", "11", "12"],
+    "images": [
+      "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&h=500&fit=crop"
+    ],
+    "stock": 42,
+    "isFeatured": true
+  },
+  {
+    "name": "Classic Court Low-Top",
+    "description": "Timeless basketball style meets modern street fashion. Premium leather construction with vintage colorways and cushioned collar for all-day comfort. A true icon reimagined.",
+    "price": 9999,
+    "brand": "Converse",
+    "category": "sneakers",
+    "sizes": ["7", "8", "9", "10", "11", "12"],
+    "images": [
+      "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1514989940723-e8e51635b782?w=400&h=500&fit=crop"
+    ],
+    "stock": 68
+  },
+  {
+    "name": "Hyperactive Trainer Elite",
+    "description": "Multi-sport excellence in one package. Dynamic stability for lateral movements, reinforced toe cap, and breathable mesh construction. Your ultimate training companion for gym sessions and outdoor workouts.",
+    "price": 11799,
+    "brand": "Reebok",
+    "category": "sneakers",
+    "sizes": ["8", "9", "10", "11", "12"],
+    "images": [
+      "https://images.unsplash.com/photo-1562183241-b937e95585b6?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1605348532760-6753d2c43329?w=400&h=500&fit=crop"
+    ],
+    "stock": 55
+  },
+  {
     "name": "RidgeLine TerraFlex Boot",
-    "description": "Conquer any trail with the RidgeLine TerraFlex Boot. Waterproof, rugged, and built to last, these boots provide exceptional grip and ankle support. Adventure awaits.",
+    "description": "Conquer any trail with the RidgeLine TerraFlex Boot. Waterproof, rugged, and built to last, these boots provide exceptional grip and ankle support. Adventure awaits in any weather condition.",
     "price": 15999,
-    "brand": "RidgeLine",
+    "brand": "Timberland",
     "category": "boots",
     "sizes": ["9", "10", "11", "12", "13"],
     "images": [
-      "https://picsum.photos/seed/terraflex-boot-1/400/500",
-      "https://picsum.photos/seed/terraflex-boot-2/400/500",
-      "https://picsum.photos/seed/terraflex-boot-3/400/500"
+      "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1542840843-3349799cded6?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1529339944280-4fe3f63e2993?w=400&h=500&fit=crop"
     ],
     "stock": 25,
     "isFeatured": true
   },
   {
-    "name": "Oasis Summer Breeze Sandal",
-    "description": "Keep cool and comfortable with the Oasis Summer Breeze Sandal. Made with soft, genuine leather and a cushioned footbed, they're the perfect companion for sunny days and beach trips.",
-    "price": 4999,
-    "brand": "Oasis",
-    "category": "sandals",
-    "sizes": ["6", "7", "8", "9", "10"],
-    "images": [
-      "https://picsum.photos/seed/oasis-sandal-1/400/500"
-    ],
-    "stock": 80
-  },
-  {
-    "name": "Metro Loafer Classic",
-    "description": "Timeless elegance meets modern comfort. The Metro Loafer is crafted from premium suede and features a minimalist design, making it a versatile choice for formal events or smart-casual outings.",
-    "price": 14999,
-    "brand": "Metro",
-    "category": "formal",
-    "sizes": ["8", "9", "10", "11"],
-    "images": [
-      "https://picsum.photos/seed/metro-loafer-1/400/500",
-      "https://picsum.photos/seed/metro-loafer-2/400/500"
-    ],
-    "stock": 40
-  },
-  {
-    "name": "Vibe Cityscape Casual",
-    "description": "Your go-to shoe for everyday style. The Vibe Cityscape combines a classic silhouette with a durable canvas build. Simple, stylish, and incredibly comfortable for all-day wear.",
-    "price": 7499,
-    "brand": "Vibe",
-    "category": "casual",
-    "sizes": ["7", "8", "9", "10", "11", "12"],
-    "images": [
-      "https://picsum.photos/seed/vibe-casual-1/400/500",
-      "https://picsum.photos/seed/vibe-casual-2/400/500"
-    ],
-    "stock": 120,
-    "isFeatured": true
-  },
-  {
-    "name": "SkyFlex Aero-Knit 2.0",
-    "description": "Lighter than air. The Aero-Knit 2.0 features a revolutionary one-piece upper that adapts to your foot for a sock-like fit. Feel the freedom of movement.",
-    "price": 13499,
-    "brand": "SkyFlex",
-    "category": "sneakers",
-    "sizes": ["8", "9", "10", "11"],
-    "images": [
-      "https://picsum.photos/seed/aeroknit-1/400/500",
-      "https://picsum.photos/seed/aeroknit-2/400/500"
-    ],
-    "stock": 60
-  },
-  {
-    "name": "RidgeLine Alpine Hiker",
-    "description": "Built for the highest peaks. The Alpine Hiker features advanced insulation, superior waterproofing, and a Vibram outsole for unmatched performance in extreme conditions.",
+    "name": "Alpine Summit Hiker",
+    "description": "Built for the highest peaks. Advanced insulation system, GORE-TEX waterproofing, and Vibram MegaGrip outsole for unmatched performance in extreme mountain conditions. Expedition-tested and approved.",
     "price": 19999,
-    "brand": "RidgeLine",
+    "brand": "The North Face",
     "category": "boots",
     "sizes": ["9", "10", "11", "12"],
     "images": [
-      "https://picsum.photos/seed/alpine-hiker-1/400/500"
+      "https://images.unsplash.com/photo-1520639888713-7851133b1ed0?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1605812860427-4024433a70fd?w=400&h=500&fit=crop"
     ],
     "stock": 15
   },
   {
-    "name": "Oasis Riverside Flip-Flop",
-    "description": "Simplicity at its best. The Riverside Flip-Flop is quick-drying, lightweight, and features a textured footbed for non-slip comfort. Perfect for the pool or a casual stroll.",
+    "name": "Desert Storm Combat Boot",
+    "description": "Military-grade durability meets tactical functionality. Reinforced leather upper, steel shank support, and aggressive tread pattern. Built to withstand the harshest environments and demanding operations.",
+    "price": 17499,
+    "brand": "Dr. Martens",
+    "category": "boots",
+    "sizes": ["8", "9", "10", "11", "12", "13"],
+    "images": [
+      "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&h=500&fit=crop"
+    ],
+    "stock": 32
+  },
+  {
+    "name": "Chelsea Heritage Boot",
+    "description": "Sophisticated style meets practical design. Premium suede construction with elastic side panels for easy on-off. Perfect for urban explorers who demand both elegance and comfort.",
+    "price": 14999,
+    "brand": "Clarks",
+    "category": "boots",
+    "sizes": ["8", "9", "10", "11", "12"],
+    "images": [
+      "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1638247025967-b4e38f787b76?w=400&h=500&fit=crop"
+    ],
+    "stock": 38,
+    "isFeatured": true
+  },
+  {
+    "name": "Frontier Work Boot Pro",
+    "description": "Engineered for the worksite. Steel toe protection, electrical hazard rating, and oil-resistant sole. Composite safety plate and moisture-wicking lining keep you safe and comfortable through long shifts.",
+    "price": 16499,
+    "brand": "Caterpillar",
+    "category": "boots",
+    "sizes": ["9", "10", "11", "12", "13", "14"],
+    "images": [
+      "https://images.unsplash.com/photo-1638247026131-13ca4f7c20c8?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1560072810-1cffb09faf0f?w=400&h=500&fit=crop"
+    ],
+    "stock": 28
+  },
+  {
+    "name": "Oasis Summer Breeze Sandal",
+    "description": "Keep cool and comfortable with the Oasis Summer Breeze. Made with soft, genuine leather and contoured footbed, they're the perfect companion for sunny days, beach trips, and summer adventures.",
+    "price": 4999,
+    "brand": "Birkenstock",
+    "category": "sandals",
+    "sizes": ["6", "7", "8", "9", "10"],
+    "images": [
+      "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1622371698374-a30d09c2ce0b?w=400&h=500&fit=crop"
+    ],
+    "stock": 80
+  },
+  {
+    "name": "Coastal Wave Flip-Flop",
+    "description": "Simplicity at its best. Quick-drying, lightweight EVA construction with textured footbed for non-slip comfort. Perfect for the pool, beach walks, or casual summer strolls.",
     "price": 2499,
-    "brand": "Oasis",
+    "brand": "Havaianas",
     "category": "sandals",
     "sizes": ["7", "8", "9", "10", "11", "12"],
     "images": [
-      "https://picsum.photos/seed/riverside-flip-1/400/500",
-      "https://picsum.photos/seed/riverside-flip-2/400/500"
+      "https://images.unsplash.com/photo-1631498592639-fde752b1e3ec?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1603321544554-1737f6729c6d?w=400&h=500&fit=crop"
     ],
     "stock": 200
   },
   {
+    "name": "Adventure Sport Sandal",
+    "description": "Built for outdoor enthusiasts. Adjustable straps, rugged rubber outsole, and quick-dry webbing. From river crossings to mountain trails, these sandals handle it all with ease.",
+    "price": 6999,
+    "brand": "Teva",
+    "category": "sandals",
+    "sizes": ["8", "9", "10", "11", "12"],
+    "images": [
+      "https://images.unsplash.com/photo-1585931853794-a73b5b5ced7f?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1535043934128-cf0b28d52f95?w=400&h=500&fit=crop"
+    ],
+    "stock": 95,
+    "isFeatured": true
+  },
+  {
+    "name": "Urban Slide Comfort",
+    "description": "Post-workout recovery meets street style. Extra-cushioned midsole with anatomical arch support. Slip into ultimate comfort after gym sessions or for casual weekend wear.",
+    "price": 5499,
+    "brand": "Adidas",
+    "category": "sandals",
+    "sizes": ["7", "8", "9", "10", "11", "12"],
+    "images": [
+      "https://images.unsplash.com/photo-1560343776-97e7d202ff0e?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1621665422696-c8f5f321f1e9?w=400&h=500&fit=crop"
+    ],
+    "stock": 120
+  },
+  {
+    "name": "Premium Leather Slide",
+    "description": "Minimalist luxury at your feet. Italian leather upper with soft nappa lining and cork-latex footbed. Sophisticated simplicity for discerning customers who appreciate quality craftsmanship.",
+    "price": 8999,
+    "brand": "Gucci",
+    "category": "sandals",
+    "sizes": ["7", "8", "9", "10", "11"],
+    "images": [
+      "https://images.unsplash.com/photo-1584378735240-2a875da49ff8?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1610990532102-ff337f94f7c3?w=400&h=500&fit=crop"
+    ],
+    "stock": 45
+  },
+  {
     "name": "Metro Executive Wingtip",
-    "description": "Command the boardroom with the Executive Wingtip. Meticulously crafted from full-grain leather with classic brogue detailing, this shoe is the epitome of professional sophistication.",
+    "description": "Command the boardroom with the Executive Wingtip. Meticulously crafted from full-grain leather with classic brogue detailing. This shoe is the epitome of professional sophistication and timeless elegance.",
     "price": 17999,
-    "brand": "Metro",
+    "brand": "Allen Edmonds",
     "category": "formal",
     "sizes": ["8.5", "9", "9.5", "10", "10.5", "11"],
     "images": [
-      "https://picsum.photos/seed/wingtip-1/400/500"
+      "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=500&fit=crop"
     ],
     "stock": 30,
     "isFeatured": true
   },
   {
-    "name": "Vibe Retro Court '88",
-    "description": "A throwback to classic basketball style. The Retro Court '88 brings vintage cool to the streets with its leather construction and iconic high-top design.",
-    "price": 8999,
-    "brand": "Vibe",
-    "category": "sneakers",
+    "name": "Classic Oxford Dress Shoe",
+    "description": "Timeless elegance for the modern gentleman. Hand-stitched construction with Goodyear welt and leather sole. The perfect choice for weddings, business meetings, and formal occasions.",
+    "price": 15999,
+    "brand": "Florsheim",
+    "category": "formal",
     "sizes": ["8", "9", "10", "11", "12"],
     "images": [
-      "https://picsum.photos/seed/retro-court-1/400/500",
-      "https://picsum.photos/seed/retro-court-2/400/500"
+      "https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1582897085656-c636d006a246?w=400&h=500&fit=crop"
     ],
-    "stock": 75
+    "stock": 42
   },
   {
-    "name": "SkyFlex Cloud Cruiser",
-    "description": "Walk on clouds. The Cloud Cruiser is our most cushioned shoe ever, designed for ultimate shock absorption and all-day comfort. Your feet will thank you.",
+    "name": "Italian Loafer Premium",
+    "description": "Handcrafted in Italy with the finest calfskin leather. Slip-on convenience meets sophisticated style. Features cushioned insole and flexible rubber sole for all-day comfort in the office.",
+    "price": 19999,
+    "brand": "Cole Haan",
+    "category": "formal",
+    "sizes": ["8", "9", "10", "11"],
+    "images": [
+      "https://images.unsplash.com/photo-1582897085656-c636d006a246?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1636718999777-bdce0fb739e2?w=400&h=500&fit=crop"
+    ],
+    "stock": 35
+  },
+  {
+    "name": "Patent Leather Derby",
+    "description": "Make a statement with high-shine patent leather. Modern silhouette with open lacing system and leather lining. Perfect for black-tie events and upscale occasions.",
+    "price": 16499,
+    "brand": "Johnston & Murphy",
+    "category": "formal",
+    "sizes": ["8.5", "9", "9.5", "10", "10.5", "11", "11.5"],
+    "images": [
+      "https://images.unsplash.com/photo-1614252368236-d66273f7fe83?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=400&h=500&fit=crop"
+    ],
+    "stock": 28,
+    "isFeatured": true
+  },
+  {
+    "name": "Monk Strap Business Shoe",
+    "description": "Distinguished style with a twist. Double monk strap design in burnished leather. Offers secure fit and refined aesthetic that transitions seamlessly from office to evening events.",
+    "price": 18499,
+    "brand": "Magnanni",
+    "category": "formal",
+    "sizes": ["8", "9", "10", "11", "12"],
+    "images": [
+      "https://images.unsplash.com/photo-1560343776-97e7d202ff0e?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1549298916-c6c5f85fa167?w=400&h=500&fit=crop"
+    ],
+    "stock": 32
+  },
+  {
+    "name": "Vibe Cityscape Casual",
+    "description": "Your go-to shoe for everyday style. The Cityscape combines a classic canvas silhouette with durable construction. Simple, stylish, and incredibly comfortable for all-day wear around the city.",
+    "price": 7499,
+    "brand": "Vans",
+    "category": "casual",
+    "sizes": ["7", "8", "9", "10", "11", "12"],
+    "images": [
+      "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400&h=500&fit=crop"
+    ],
+    "stock": 120,
+    "isFeatured": true
+  },
+  {
+    "name": "Cloud Comfort Slip-On",
+    "description": "Walk on clouds. Our most cushioned casual shoe ever, designed with memory foam insole and cloud-like midsole for ultimate shock absorption and all-day comfort. Your feet will thank you.",
     "price": 11499,
-    "brand": "SkyFlex",
+    "brand": "Skechers",
     "category": "casual",
     "sizes": ["7", "8", "9", "10", "11"],
     "images": [
-      "https://picsum.photos/seed/cloud-cruiser-1/400/500",
-      "https://picsum.photos/seed/cloud-cruiser-2/400/500"
+      "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1603808033587-5e3a6c89e1a9?w=400&h=500&fit=crop"
     ],
-    "stock": 90,
+    "stock": 90
+  },
+  {
+    "name": "Retro Canvas Low-Top",
+    "description": "Vintage vibes meet modern comfort. Sustainable canvas construction with vulcanized rubber sole. Classic design that never goes out of style, perfect for weekend adventures.",
+    "price": 6999,
+    "brand": "Converse",
+    "category": "casual",
+    "sizes": ["7", "8", "9", "10", "11", "12"],
+    "images": [
+      "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1605733160314-4fc7dac4bb16?w=400&h=500&fit=crop"
+    ],
+    "stock": 105
+  },
+  {
+    "name": "Suede Desert Boot",
+    "description": "A timeless classic reimagined. Premium suede upper with crepe rubber sole. Versatile styling that works with jeans, chinos, or casual suits. A wardrobe essential since 1950.",
+    "price": 12999,
+    "brand": "Clarks",
+    "category": "casual",
+    "sizes": ["8", "9", "10", "11", "12"],
+    "images": [
+      "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&h=500&fit=crop"
+    ],
+    "stock": 75,
     "isFeatured": true
+  },
+  {
+    "name": "Everyday Leather Sneaker",
+    "description": "Elevated casual style in premium leather. Minimalist design with cushioned footbed and flexible cupsole. Transitions effortlessly from coffee runs to casual Friday at the office.",
+    "price": 9999,
+    "brand": "Cole Haan",
+    "category": "casual",
+    "sizes": ["7", "8", "9", "10", "11", "12"],
+    "images": [
+      "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&h=500&fit=crop"
+    ],
+    "stock": 88
   }
 ]

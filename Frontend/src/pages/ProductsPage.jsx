@@ -36,7 +36,7 @@ const ProductsPage = () => {
 
         navigate(`?${queryParams.toString()}`, { replace: true });
         
-        const result = await getAllShoes(filters);
+        const result = await getAllShoes({ ...filters, limit: 100 });
         setShoes(result.shoes);
       } catch (err) {
         setError("Failed to fetch products. Please try again.");

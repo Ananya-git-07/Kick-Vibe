@@ -14,7 +14,7 @@ const ProductsDashboardPage = () => {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const data = await getAllShoes();
+      const data = await getAllShoes({ limit: 100 });
       setShoes(data.shoes);
     } catch (error) {
       toast.error('Failed to fetch products.');

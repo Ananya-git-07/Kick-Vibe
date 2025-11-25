@@ -4,10 +4,13 @@ import {
     getAllShoes,
     getShoeById,
     updateShoe,
+    updateShoeImages,
+    deleteShoeImages,
     deleteShoe,
     searchShoes,
     getNewArrivals,
-    getFeaturedShoes
+    getFeaturedShoes,
+    getAllBrands
 } from "../controllers/shoe.controller.js";
 import { upload } from "../middleware/multer.middleware.js";
 // --- MODIFIED IMPORT ---
@@ -18,6 +21,7 @@ const router = Router();
 // --- Public Routes ---
 router.route("/new-arrivals").get(getNewArrivals);
 router.route("/featured").get(getFeaturedShoes);
+router.route("/brands").get(getAllBrands);
 router.route("/search").get(searchShoes);
 router.route("/").get(getAllShoes);
 router.route("/:id").get(getShoeById);
@@ -38,6 +42,18 @@ router.route("/:id")
     .delete(
         verifyJWT, // <-- Use the regular JWT middleware
         deleteShoe
+    );
+
+// New route for updating images
+router.route("/:id/images")
+    .patch(
+        verifyJWT,
+        upload.fields([ { name: 'images', maxCount: 5 } ]),
+        updateShoeImages
+    )
+    .delete(
+        verifyJWT,
+        deleteShoeImages
     );
 
 export default router;
