@@ -50,7 +50,8 @@ router.get(
         // 2. Set the tokens in cookies
         const options = {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: true,
+            sameSite: 'none'
         };
 
         // 3. Prepare the user data to be sent back (without sensitive info)
