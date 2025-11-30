@@ -27,14 +27,24 @@ const generateAccessAndRefreshTokens = async (userId) => {
 // The user's browser will be redirected to Google's login page.
 router.get(
     "/google",
-    passport.authenticate("google", { scope: ["profile", "email"], state: "login" })
+    (req, res, next) => {
+        passport.authenticate("google", { 
+            scope: ["profile", "email"],
+            state: "login"
+        })(req, res, next);
+    }
 );
 
 // Route 1b: The endpoint to kick off the Google authentication process FOR SIGNUP
 // The user's browser will be redirected to Google's login page.
 router.get(
     "/google/signup",
-    passport.authenticate("google", { scope: ["profile", "email"], state: "signup" })
+    (req, res, next) => {
+        passport.authenticate("google", { 
+            scope: ["profile", "email"],
+            state: "signup"
+        })(req, res, next);
+    }
 );
 
 
@@ -44,7 +54,9 @@ router.get(
     "/google/callback",
     (req, res, next) => {
         const isSignup = req.query.state === 'signup';
-        const frontendUrl = process.env.CORS_ORIGIN || 'http://localhost:5173';
+        const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
+        // Handle multiple origins - use first one for redirects
+        const frontendUrl = corsOrigin.split(',')[0];
         
         passport.authenticate("google", {
             session: false,
@@ -72,12 +84,14 @@ router.get(
         const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
         // 4. Send the response and redirect the user back to the frontend
-        // IMPORTANT: Change 'http://localhost:3000' to your actual frontend domain
+        const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
+        const frontendUrl = corsOrigin.split(',')[0];
+        
         return res
             .status(200)
             .cookie("accessToken", accessToken, options)
             .cookie("refreshToken", refreshToken, options)
-            .redirect(process.env.CORS_ORIGIN || 'http://localhost:5173');
+            .redirect(frontendUrl);
     })
 );
 

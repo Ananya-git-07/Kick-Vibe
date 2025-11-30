@@ -23,9 +23,9 @@ passport.use(
                 if (user) {
                     if (isSignup) {
                         // User already exists and they're trying to sign up
-                        return done(null, false, { 
-                            message: "An account with this email already exists. Please sign in instead." 
-                        });
+                        // In this case, we'll just log them in instead of rejecting
+                        // This provides better UX - they get logged in rather than seeing an error
+                        return done(null, user);
                     }
                     // 2. User exists and they're trying to log in - allow it
                     return done(null, user);
