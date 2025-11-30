@@ -5,6 +5,8 @@ yarn-error.log
 
 # Env
 .env
+.env.local
+.env.*.local
 
 # Public/Temp
 src/public/temp

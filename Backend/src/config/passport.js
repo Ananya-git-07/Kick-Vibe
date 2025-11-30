@@ -8,7 +8,7 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "/api/v1/auth/google/callback", // Must match the one in Google Console
+            callbackURL: `${process.env.BACKEND_URL || 'http://localhost:8000'}/api/v1/auth/google/callback`,
             scope: ["profile", "email"],
         },
         // This is the "verify" callback function that runs after Google authenticates the user
