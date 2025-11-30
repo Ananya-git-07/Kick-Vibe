@@ -1,7 +1,24 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useAuth } from '../hooks/useAuth';
+import Loader from './Loader';
 
 const AuthLayout = () => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader size="lg" />
+      </div>
+    );
+  }
+
+  // If user is already authenticated, redirect to home page
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
     <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden">
       {/* Animated Blobs */}
