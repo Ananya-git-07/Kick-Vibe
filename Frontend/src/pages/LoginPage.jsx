@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Button from '../components/Button';
 import { Mail, Lock } from 'lucide-react';
@@ -12,8 +12,17 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  // Check for error parameter in URL (from Google OAuth failure)
+  useEffect(() => {
+    const errorParam = searchParams.get('error');
+    if (errorParam === 'account_not_found') {
+      setError('No account found with this Google account. Please sign up first.');
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

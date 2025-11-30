@@ -18,26 +18,14 @@ passport.use(
                 let user = await User.findOne({ email: profile.emails[0].value });
 
                 if (user) {
-                    // 2a. If user exists, they are logging in.
-                    // We don't need to do anything with the user document here.
-                    // Just pass the user object to the next step.
+                    // 2. If user exists, they can log in.
                     return done(null, user);
                 } else {
-                    // 2b. If user does not exist, they are signing up.
-                    // Create a new user in our database.
-                    const newUser = await User.create({
-                        fullName: profile.displayName,
-                        email: profile.emails[0].value,
-                        // Generate a username from the email (e.g., 'john.doe' from 'john.doe@gmail.com')
-                        // and add random numbers to ensure it's unique
-                        username: profile.emails[0].value.split('@')[0] + Math.floor(Math.random() * 10000),
-                        avatar: profile.photos[0].value, // Use the Google profile picture as avatar
-                        // Since they are using Google, they don't have a password with us.
-                        // We will create a random, secure password that they will never use.
-                        password: crypto.randomBytes(20).toString('hex'),
+                    // 3. If user does not exist, reject the login attempt.
+                    // They need to register first using the regular signup flow.
+                    return done(null, false, { 
+                        message: "No account found with this email. Please sign up first." 
                     });
-
-                    return done(null, newUser);
                 }
             } catch (error) {
                 return done(error, false, { message: "Error in Google OAuth strategy." });

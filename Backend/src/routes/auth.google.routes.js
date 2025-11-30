@@ -37,7 +37,7 @@ router.get(
     "/google/callback",
     passport.authenticate("google", {
         session: false, // We are using JWT, not sessions
-        failureRedirect: "/login-failure", // A route to redirect to if login fails (optional)
+        failureRedirect: `${process.env.CORS_ORIGIN || 'http://localhost:5173'}/login?error=account_not_found`, // Redirect to login with error
     }),
     // This is the final handler that runs ONLY on successful authentication
     asyncHandler(async (req, res) => {
