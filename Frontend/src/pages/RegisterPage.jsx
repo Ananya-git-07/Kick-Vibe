@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Button from '../components/Button';
 import { Mail, Lock, User, Image as ImageIcon } from 'lucide-react';
+import GoogleIcon from '../components/GoogleIcon';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,16 @@ const RegisterPage = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [avatarPreview, setAvatarPreview] = useState('');
+  const [searchParams] = useSearchParams();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  // Check for error parameter in URL (from Google OAuth failure)
+  useEffect(() => {
+    const errorParam = searchParams.get('error');
+    if (errorParam === 'registration_failed') {
+      setError('Google sign-up failed. Please try again.');
+    }
+  }, [searchParams]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -114,6 +125,25 @@ const RegisterPage = () => {
             </Button>
           </div>
         </form>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-(--border-color)"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-(--bg-color) text-(--text-color)/60">Or continue with</span>
+          </div>
+        </div>
+
+        <div>
+          <a
+            href={`${backendUrl}/api/v1/auth/google/signup`}
+            className="w-full inline-flex justify-center py-3 px-4 border border-(--border-color) rounded-md shadow-sm bg-(--surface-color) text-sm font-medium text-(--text-color) hover:bg-(--border-light) dark:hover:bg-(--border-dark) transition-colors"
+          >
+            <GoogleIcon />
+            <span className="ml-3">Sign up with Google</span>
+          </a>
+        </div>
       </div>
     </div>
   );

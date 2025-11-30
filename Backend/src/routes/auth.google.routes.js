@@ -23,11 +23,18 @@ const generateAccessAndRefreshTokens = async (userId) => {
     }
 };
 
-// Route 1: The endpoint to kick off the Google authentication process
+// Route 1: The endpoint to kick off the Google authentication process FOR LOGIN
 // The user's browser will be redirected to Google's login page.
 router.get(
     "/google",
-    passport.authenticate("google", { scope: ["profile", "email"] })
+    passport.authenticate("google", { scope: ["profile", "email"], state: "login" })
+);
+
+// Route 1b: The endpoint to kick off the Google authentication process FOR SIGNUP
+// The user's browser will be redirected to Google's login page.
+router.get(
+    "/google/signup",
+    passport.authenticate("google", { scope: ["profile", "email"], state: "signup" })
 );
 
 
@@ -35,10 +42,17 @@ router.get(
 // Passport will handle the code exchange and run our "verify" callback from passport.js
 router.get(
     "/google/callback",
-    passport.authenticate("google", {
-        session: false, // We are using JWT, not sessions
-        failureRedirect: `${process.env.CORS_ORIGIN || 'http://localhost:5173'}/login?error=account_not_found`, // Redirect to login with error
-    }),
+    (req, res, next) => {
+        const isSignup = req.query.state === 'signup';
+        const frontendUrl = process.env.CORS_ORIGIN || 'http://localhost:5173';
+        
+        passport.authenticate("google", {
+            session: false,
+            failureRedirect: isSignup 
+                ? `${frontendUrl}/register?error=registration_failed`
+                : `${frontendUrl}/login?error=account_not_found`,
+        })(req, res, next);
+    },
     // This is the final handler that runs ONLY on successful authentication
     asyncHandler(async (req, res) => {
         // The user object is attached to req.user by the Passport "verify" callback
