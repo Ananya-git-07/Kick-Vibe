@@ -15,7 +15,7 @@ const RegisterPage = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const { register, login } = useAuth();
   const navigate = useNavigate();
   const [avatarPreview, setAvatarPreview] = useState('');
   const [searchParams] = useSearchParams();
@@ -59,8 +59,17 @@ const RegisterPage = () => {
     data.append('avatar', formData.avatar);
 
     try {
+      // Register the user
       await register(data);
-      navigate('/login?registered=true'); // Redirect to login page with a success message
+      
+      // Automatically log them in after successful registration
+      await login({ 
+        email: formData.email, 
+        password: formData.password 
+      });
+      
+      // Redirect to home page
+      navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
