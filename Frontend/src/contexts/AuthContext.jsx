@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     const response = await api.post('/users/login', credentials);
-    console.log("USER DATA RECEIVED ON LOGIN:", response.data.data.user); 
     setUser(response.data.data.user);
     return response.data.data.user;
   };
@@ -50,7 +49,7 @@ export const AuthProvider = ({ children }) => {
    const value = {
     user,
     isAuthenticated: !!user,
-    // We no longer need to export 'loading' in the value object for other components
+    loading, // Export loading state for route guards
     login,
     register,
     logout,

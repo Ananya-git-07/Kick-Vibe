@@ -40,13 +40,9 @@ app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/wishlist", wishlistRouter);
 app.use("/api/v1/reviews", reviewRouter);
+app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/payment", paymentRouter);
 
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/shoes", shoeRouter);
-app.use("/api/v1/cart", cartRouter);
-app.use("/api/v1/orders", orderRouter);
-app.use("/api/v1/admin", adminRouter); 
-app.use("/api/v1/payment", paymentRouter);// <-- ADD ROUTE
 // --- Global Error Handling Middleware ---
 // This single line replaces the old inline error handler.
 app.use(errorHandler);
