@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@variant dark (&:is(.dark *));
+
 @theme {
   /* Cool Modern Theme - Cyan/Teal & Coral/Orange accent */
   --color-brand-primary: oklch(65% 0.19 195);
